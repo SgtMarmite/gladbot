@@ -19,7 +19,8 @@ function getPythonPath() {
     if (isDev()) {
         return null;
     }
-    return path.join(process.resourcesPath, 'gladbot', 'gladbot');
+    const binary = process.platform === 'win32' ? 'gladbot.exe' : 'gladbot';
+    return path.join(process.resourcesPath, 'gladbot', binary);
 }
 
 async function findFreePort() {
@@ -30,7 +31,8 @@ async function findFreePort() {
 function spawnPython(port) {
     if (isDev()) {
         const projectRoot = path.resolve(__dirname, '..');
-        const venvPython = path.join(projectRoot, '.venv', 'bin', 'python');
+        const venvDir = process.platform === 'win32' ? 'Scripts' : 'bin';
+        const venvPython = path.join(projectRoot, '.venv', venvDir, 'python');
         pythonProcess = spawn(venvPython, ['-m', 'src.main', '--port', String(port)], {
             cwd: projectRoot,
             stdio: ['ignore', 'pipe', 'pipe'],
