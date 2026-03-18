@@ -1,0 +1,37 @@
+{
+  "name": "gladbot",
+  "version": "1.0.0",
+  "description": "Gladbot — Automated Gladiator",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "get-port": "^7.1.0"
+  },
+  "devDependencies": {
+    "electron": "^35.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.gladbot.app",
+    "productName": "Gladbot",
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "assets/icon.icns",
+      "target": "dmg"
+    },
+    "extraResources": [
+      {
+        "from": "../dist/gladbot",
+        "to": "gladbot",
+        "filter": ["**/*"]
+      }
+    ],
+    "files": [
+      "main.js",
+      "preload.js"
+    ]
+  }
+}

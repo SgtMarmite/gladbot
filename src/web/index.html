@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gladbot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="grain-overlay"></div>
+
+    <header>
+        <div class="header-inner">
+            <div class="logo-group">
+                <div class="logo-icon">&#9876;</div>
+                <div>
+                    <h1>GLADBOT</h1>
+                    <span class="subtitle">Automated Gladiator</span>
+                </div>
+            </div>
+            <div id="connection-badge" class="badge disconnected">
+                <span class="badge-dot"></span>
+                <span class="badge-text">Disconnected</span>
+            </div>
+        </div>
+        <div class="header-ornament"></div>
+    </header>
+
+    <section id="session-section" class="panel">
+        <div class="panel-header">
+            <h2>&#127942; Session</h2>
+        </div>
+        <div class="panel-body">
+            <button class="btn-gold btn-lg btn-full" onclick="browserLogin()">
+                &#127760; Login with Browser
+            </button>
+            <p class="hint-text" id="browser-login-hint" style="text-align:center;margin-top:8px">
+                Opens a browser window &mdash; log in normally, Gladbot captures the session.
+            </p>
+        </div>
+    </section>
+
+    <section id="stats-section" class="hidden">
+        <div class="stats-row">
+            <div class="stat-card stat-hp">
+                <div class="stat-icon">&#10084;</div>
+                <div class="stat-body">
+                    <label>Vitae</label>
+                    <div class="bar-container">
+                        <div class="bar hp-bar" id="hp-bar"></div>
+                        <span class="bar-text" id="hp-text">0/0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card stat-gold">
+                <div class="stat-icon">&#9733;</div>
+                <div class="stat-body">
+                    <label>Aurum</label>
+                    <span class="stat-value" id="gold-val">0</span>
+                </div>
+            </div>
+            <div class="stat-card stat-level">
+                <div class="stat-icon">&#9813;</div>
+                <div class="stat-body">
+                    <label>Gradus</label>
+                    <span class="stat-value" id="level-val">0</span>
+                </div>
+            </div>
+            <div class="stat-card stat-xp">
+                <div class="stat-icon">&#9734;</div>
+                <div class="stat-body">
+                    <label>Experientia</label>
+                    <div class="bar-container">
+                        <div class="bar xp-bar" id="xp-bar"></div>
+                        <span class="bar-text" id="xp-text">0/0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="main-grid" class="hidden">
+        <section id="controls-section" class="panel">
+            <div class="panel-header">
+                <h2>&#9876; Command</h2>
+            </div>
+            <div class="panel-body">
+                <div class="control-row">
+                    <button id="btn-start" class="btn-gold btn-lg" onclick="botStart()">
+                        &#9654; Start Bot
+                    </button>
+                    <button id="btn-stop" class="btn-danger btn-lg" onclick="botStop()" disabled>
+                        &#9632; Stop Bot
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="modules-section" class="panel">
+            <div class="panel-header">
+                <h2>&#9881; Modules</h2>
+            </div>
+            <div class="panel-body" id="modules-list"></div>
+        </section>
+    </div>
+
+    <section id="log-section" class="panel hidden">
+        <div class="panel-header">
+            <h2>&#128220; Activity Log</h2>
+        </div>
+        <div class="panel-body">
+            <div id="log-container"></div>
+        </div>
+    </section>
+
+    <div id="module-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeModal()"></div>
+        <div class="modal-content panel">
+            <div class="panel-header">
+                <h2 id="modal-title">Module Settings</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="panel-body">
+                <div id="modal-body"></div>
+                <div class="modal-footer">
+                    <button class="btn-gold" onclick="saveModuleConfig()">Save</button>
+                    <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

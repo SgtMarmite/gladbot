@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+dist/
+build/
+*.spec.bak
+
+node_modules/
+electron/dist/
+
+.pytest_cache/
+
+.playwright-mcp/
+_reference_bot/
+*.png
