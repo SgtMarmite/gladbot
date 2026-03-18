@@ -5,7 +5,6 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
-  workflow_dispatch:
 
 jobs:
   test:
@@ -21,51 +20,3 @@ jobs:
       - run: pip install -r requirements.txt
 
       - run: pytest tests/ -v
-
-  build:
-    needs: test
-    strategy:
-      matrix:
-        include:
-          - os: macos-latest
-            artifact: Gladbot-mac
-          - os: windows-latest
-            artifact: Gladbot-win
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-          cache: pip
-
-      - run: pip install -r requirements.txt
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-          cache-dependency-path: electron/package-lock.json
-
-      - name: PyInstaller bundle
-        run: pyinstaller gladbot.spec --noconfirm --clean
-
-      - name: Install Electron deps
-        working-directory: electron
-        run: npm ci
-
-      - name: Build Electron app
-        working-directory: electron
-        run: npx electron-builder --publish never
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact }}
-          path: |
-            electron/dist/*.dmg
-            electron/dist/*.exe
-            electron/dist/*.zip
-          if-no-files-found: warn

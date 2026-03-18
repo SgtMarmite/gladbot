@@ -14,17 +14,16 @@
     "electron": "^35.2.1",
     "electron-builder": "^25.1.8"
   },
+  "repository": "github:SgtMarmite/gladbot",
   "build": {
     "appId": "com.gladbot.app",
     "productName": "Gladbot",
     "compression": "maximum",
+    "publish": null,
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "assets/icon.icns",
       "target": "dmg"
-    },
-    "dmg": {
-      "writeUpdateInfo": false
     },
     "win": {
       "target": "nsis"
