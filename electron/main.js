@@ -119,17 +119,35 @@ function handleBrowserLogin(port) {
             },
         });
 
+        const loginSession = session.fromPartition(LOGIN_PARTITION);
+
+        loginSession.webRequest.onBeforeRequest({ urls: ['*://*/*'] }, (details, callback) => {
+            const url = details.url;
+            if (!resolved && GAME_URL_RE.test(url)) {
+                console.log('[login] Game request detected:', url.substring(0, 100));
+                captureSession(url);
+            }
+            callback({});
+        });
+
         loginWindow.loadURL(LOBBY_URL);
 
-        const onNavigate = async (_event, url) => {
-            if (!GAME_URL_RE.test(url)) return;
+        let resolved = false;
+
+        const captureSession = async (url) => {
+            if (resolved) return;
+            resolved = true;
 
             try {
                 const parsedUrl = new URL(url);
                 const domain = parsedUrl.hostname;
 
-                const cookies = await session.fromPartition(LOGIN_PARTITION).cookies.get({ domain });
-                const cookieHeader = cookies.map((c) => `${c.name}=${c.value}`).join('; ');
+                const allCookies = await loginSession.cookies.get({});
+                const relevant = allCookies.filter(
+                    (c) => domain.endsWith(c.domain.replace(/^\./, '')) || c.domain.replace(/^\./, '').endsWith(domain)
+                );
+                console.log(`[login] Captured ${relevant.length}/${allCookies.length} cookies for ${domain}`);
+                const cookieHeader = relevant.map((c) => `${c.name}=${c.value}`).join('; ');
 
                 const postData = JSON.stringify({ url, cookie_header: cookieHeader });
                 const result = await new Promise((res, rej) => {
@@ -162,9 +180,6 @@ function handleBrowserLogin(port) {
                 resolve({ ok: false, message: err.message });
             }
         };
-
-        loginWindow.webContents.on('did-navigate', onNavigate);
-        loginWindow.webContents.on('did-navigate-in-page', onNavigate);
 
         loginWindow.on('closed', () => {
             resolve({ ok: false, message: 'Login window closed' });

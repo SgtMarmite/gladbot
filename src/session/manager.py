@@ -119,7 +119,7 @@ class SessionManager:
 
         if resp.status_code in (301, 302, 303, 307, 308):
             location = resp.headers.get("location", "")
-            logger.warning("Redirected to %s — session expired", location)
+            logger.warning("Session expired: redirected to %s (from %s %s)", location, method, path)
             return None
 
         if resp.status_code >= 400:
@@ -129,6 +129,7 @@ class SessionManager:
         html = resp.text
 
         if GameParser.is_session_expired(html):
+            logger.warning("Session expired: login page detected in response to %s %s", method, path)
             return None
 
         new_sh = GameParser.parse_secure_hash(html)
