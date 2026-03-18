@@ -121,13 +121,12 @@ function handleBrowserLogin(port) {
 
         const loginSession = session.fromPartition(LOGIN_PARTITION);
 
-        loginSession.webRequest.onBeforeRequest({ urls: ['*://*/*'] }, (details, callback) => {
+        loginSession.webRequest.onCompleted({ urls: ['*://*/*'] }, (details) => {
             const url = details.url;
             if (!resolved && GAME_URL_RE.test(url)) {
-                console.log('[login] Game request detected:', url.substring(0, 100));
+                console.log('[login] Game response completed:', url.substring(0, 100));
                 captureSession(url);
             }
-            callback({});
         });
 
         loginWindow.loadURL(LOBBY_URL);
