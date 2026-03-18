@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import logging
+import sys
 from pathlib import Path
 
 import uvicorn
@@ -25,7 +26,10 @@ from src.bot.work import WorkModule
 from src.config import Settings
 from src.session.manager import SessionManager
 
-WEB_DIR = Path(__file__).parent / "web"
+if getattr(sys, 'frozen', False):
+    WEB_DIR = Path(sys._MEIPASS) / "src" / "web"
+else:
+    WEB_DIR = Path(__file__).parent / "web"
 
 
 def create_app() -> FastAPI:
