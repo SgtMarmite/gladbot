@@ -84,8 +84,8 @@ class BotEngine:
 
                 jitter = wait_seconds * random.uniform(0, self.session.settings.jitter_pct)
                 self._next_run[name] = time.time() + wait_seconds + jitter
-                module._last_result = "OK"
-                await self._emit_log(name, f"{name} tick complete, next in {wait_seconds:.0f}s")
+                result_msg = module._last_result or "OK"
+                await self._emit_log(name, result_msg)
 
             except SessionExpired:
                 module._running = False

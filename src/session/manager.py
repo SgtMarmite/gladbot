@@ -122,17 +122,8 @@ class SessionManager:
             if "needLogin" in location or "submod=login" in location:
                 logger.warning("Session expired: redirected to %s (from %s %s)", location, method, path)
                 return None
-            logger.info("Redirected to %s (from %s %s), following", location, method, path)
-            resp = await self._client.request("GET", location)
-            html = resp.text
-            if GameParser.is_session_expired(html):
-                logger.warning("Session expired: login page detected after redirect from %s %s", method, path)
-                return None
-            new_sh = GameParser.parse_secure_hash(html)
-            if new_sh and new_sh != self.secure_hash:
-                logger.debug("Secure hash rotated: %s → %s", self.secure_hash[:8], new_sh[:8])
-                self.secure_hash = new_sh
-            return html
+            logger.debug("Non-login redirect to %s (from %s %s), ignoring", location, method, path)
+            return ""
 
         if resp.status_code >= 400:
             logger.error("HTTP %d on %s %s", resp.status_code, method, path)
